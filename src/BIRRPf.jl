@@ -13,7 +13,7 @@ fortcomplex = Complex{Float64}
 fortint = Int64
 
 # "locate" and load the shared library
-const _BIRRP_fn = Libdl.find_library(["birrp"], ["./fortran", "../fortran"])
+const _BIRRP_fn = Libdl.find_library(["birrp"], [(@__DIR__)*"/fortran"])
 const _birrp_dl = Libdl.dlopen(_BIRRP_fn)
 
 # Grab pointers to all of the functions that we are going to expose
@@ -21,7 +21,6 @@ const _rarfilt_sym = Libdl.dlsym(_birrp_dl, :rarfilt_)
 const _dpqr79_sym = Libdl.dlsym(_birrp_dl, :dpqr79_)
 const _sft_sym = Libdl.dlsym(_birrp_dl, :sft_)
 const _prewhiten_sym = Libdl.dlsym(_birrp_dl, :prewhiten_)
-const _dataft_sym = Libdl.dlsym(_birrp_dl, :dataft_)
 
 
 """
