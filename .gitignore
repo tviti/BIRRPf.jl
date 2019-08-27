@@ -1,5 +1,6 @@
 # Exclude the BIRRP fortran source since we aren't actually supposed to be distributing it...
-src/fortran/
+*.f
+parameters.h
 *.dylib
 *.so
 
