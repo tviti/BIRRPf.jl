@@ -8,19 +8,15 @@ module BIRRPf
 import Libdl
 
 # These should correspond to the types that BIRRP was compiled with.
-fortfloat = Float64
-fortcomplex = Complex{Float64}
-fortint = Int64
+const fortfloat = Float64
+const fortcomplex = Complex{Float64}
+const fortint = Int64
 
 # "locate" and load the shared library
 const _BIRRP_fn = Libdl.find_library(["birrp"], [(@__DIR__)*"/fortran"])
-const _birrp_dl = Libdl.dlopen(_BIRRP_fn)
-
-# Grab pointers to all of the functions that we are going to expose
-const _rarfilt_sym = Libdl.dlsym(_birrp_dl, :rarfilt_)
-const _dpqr79_sym = Libdl.dlsym(_birrp_dl, :dpqr79_)
-const _sft_sym = Libdl.dlsym(_birrp_dl, :sft_)
-const _prewhiten_sym = Libdl.dlsym(_birrp_dl, :prewhiten_)
+if _BIRRP_fn == ""
+    error("Could not locate BIRRP shared lib!")
+end
 
 
 """
@@ -74,7 +70,7 @@ function rarfilt!(rdata::AbstractVector{fortfloat},
      npts = size(rdata, 1)
      istat = Ref{fortint}(0)
 
-     ccall(_rarfilt_sym,
+     ccall((:rarfilt_, _BIRRP_fn),
           Cvoid,
           (Ref{fortint},  # npts
            Ref{fortint},  # nfft
@@ -120,7 +116,7 @@ function dpqr79!(coeff::AbstractVector{fortfloat},
     ndeg = size(coeff, 1) - 1
     ierr = Ref{fortint}(0)
 
-    ccall(_dpqr79_sym,
+    ccall((:dpqr79_, _BIRRP_fn),
           Cvoid,
           (Ref{fortint},  # ndeg
            Ref{fortfloat},  # coeff
@@ -158,7 +154,7 @@ function sft!(x::AbstractVector{fortfloat},
 
     n = length(x)
 
-    ccall(_sft_sym,
+    ccall((:sft_, _BIRRP_fn),
           Cvoid,
           (Ref{fortfloat},  # x
            Ref{fortint},  # n
@@ -197,7 +193,7 @@ function prewhiten!(rdata::AbstractVector{fortfloat},
     npts = length(rdata)
     nar = length(ar)
 
-    ccall(_prewhiten_sym,
+    ccall((:prewhiten_, _BIRRP_fn),
           Cvoid,
           (Ref{fortint},  # npts
            Ref{fortint},  # nar
