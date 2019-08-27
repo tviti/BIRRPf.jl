@@ -2,7 +2,7 @@
 ## *WIP*
 ## Author: Taylor Viti (tviti@hawaii.edu)
 
-Julia bindings to the original BIRRP Fortran subroutines.
+Julia bindings to the original BIRRP Fortran subroutines. This really isn't intended to be "useful", moreso as a way of comparing my own implementations to the BIRRP ones.
 
 More info about BIRRP (including the original source) can be obtained at: https://www.whoi.edu/science/AOPE/people/achave/Site/Next1.html
 
