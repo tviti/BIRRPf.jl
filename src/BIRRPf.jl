@@ -36,7 +36,7 @@ function rarfilt(rdata::Vector{fortfloat}, nar::fortint, nfft::fortint)
     ar = zeros(fortfloat, (nar, ))
 
     work = _init_workspace(size(rdata, 1), nfft)
-    
+
     rarfilt!(rdata, nar, nfft, ar, work)
 
     return ar
@@ -207,6 +207,94 @@ function prewhiten!(rdata::AbstractVector{fortfloat},
           pdata)
 
     return pdata
+end
+
+
+#=
+Methods for accessing vals from parameters.h,
+along with consts for storing the vals
+=#
+
+# TODO: Lots of copy-pasta. ccall needs to be passed tuple literals though, so
+# not sure what else we can do about this (besides making a macro maybe)
+
+function get_npcsm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_npcsm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_nptsm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_nptsm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_nptssm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_nptssm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_noutm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_noutm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_ninpm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_ninpm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_nrefm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_nrefm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_nrsitem()
+    out = Ref{fortint}(0)
+
+    ccall((:get_nrsitem_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
+end
+
+
+function get_nsectm()
+    out = Ref{fortint}(0)
+
+    ccall((:get_nsectm_, _BIRRP_fn),
+          Cvoid, (Ref{fortint}, ), out)
+
+    return out.x
 end
 
 
